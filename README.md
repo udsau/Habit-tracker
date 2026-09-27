@@ -15,11 +15,11 @@ A minimalistic, dark-themed habit tracker to help you build consistency, keep up
 
 ## Note
 
-Like the Study Planner, I made this for my own personal use too!
+Like the [**Study Planner **](https://github.com/udsau/Study-Planner), I made this for my own personal use too. :] 
 
 This is the initial version, so there's no account system or backend at the moment. Everything is stored locally in your browser using `localStorage`, i.e. your data stays on your device rather than being sent to a server.
 
-One thing to keep in mind: **if you clear the site's browser data, your saved data will be wiped out.** So maybe don't clear your browser storage unless you're okay with starting fresh. :')
+One thing to keep in mind: **if you clear the site's browser data, your saved data will be wiped out.** So maybe don't clear your browser storage unless you're okay with starting fresh.
 
 I'm looking forward to adding more features and improving it as I go!
 
