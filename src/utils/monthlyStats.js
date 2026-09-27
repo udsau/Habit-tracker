@@ -204,8 +204,23 @@ export function getMonthlyHabitStats(
   // Sort descending by percent
   const sorted = [...habitBreakdown].sort((a, b) => b.percent - a.percent)
 
-  const mostConsistent = sorted[0]
-  const mostInconsistent = sorted[sorted.length - 1]
+  const maxPercent = sorted[0].percent
+  const mostConsistentHabits = sorted.filter(h => h.percent === maxPercent)
+
+  const minPercent = sorted[sorted.length - 1].percent
+  const mostInconsistentHabits = sorted.filter(h => h.percent === minPercent)
+
+  const mostConsistent = {
+    percent: maxPercent,
+    habits: mostConsistentHabits,
+    name: mostConsistentHabits.map(h => h.name).join(', '),
+  }
+
+  const mostInconsistent = {
+    percent: minPercent,
+    habits: mostInconsistentHabits,
+    name: mostInconsistentHabits.map(h => h.name).join(', '),
+  }
 
   // Monthly score: overall average completion % across all habits and all weeks combined
   const allWeeklyPercents = []

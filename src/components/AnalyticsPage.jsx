@@ -155,36 +155,80 @@ export default function AnalyticsPage({ account, habitsData }) {
       {/* ── 4 Stat Cards ─────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Most Consistent Habit */}
-        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex flex-col gap-2 shadow-lg">
-          <div className="flex items-center justify-between text-muted">
-            <span className="text-xs font-semibold uppercase tracking-wider">
-              Most Consistent Habit
-            </span>
-            <Award size={18} className="text-accent" />
+        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex flex-col justify-between gap-2 shadow-lg min-h-[140px]">
+          <div>
+            <div className="flex items-center justify-between text-muted mb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider">
+                Most Consistent Habit
+              </span>
+              <Award size={18} className="text-accent" />
+            </div>
+
+            {mostConsistent && mostConsistent.habits?.length > 0 ? (
+              mostConsistent.habits.length === 1 ? (
+                <p className="text-xl font-bold text-white truncate tracking-tight" title={mostConsistent.habits[0].name}>
+                  {mostConsistent.habits[0].name}
+                </p>
+              ) : (
+                <div className="flex flex-col gap-1">
+                  <p
+                    className="text-sm font-bold text-white leading-snug line-clamp-2"
+                    title={mostConsistent.name}
+                  >
+                    {mostConsistent.name}
+                  </p>
+                  <span className="text-[10px] uppercase font-bold text-accent tracking-wider">
+                    {mostConsistent.habits.length} habits tied
+                  </span>
+                </div>
+              )
+            ) : (
+              <p className="text-xl font-bold text-white tracking-tight">—</p>
+            )}
           </div>
-          <p className="text-xl font-bold text-white truncate tracking-tight" title={mostConsistent?.name}>
-            {mostConsistent ? mostConsistent.name : '—'}
-          </p>
+
           <p className="text-muted text-xs">
-            {mostConsistent
+            {mostConsistent && mostConsistent.habits?.length > 0
               ? `${mostConsistent.percent}% avg in ${shortMonth}`
               : 'No recorded weeks yet'}
           </p>
         </div>
 
         {/* Card 2: Most Inconsistent Habit */}
-        <div className="bg-surface rounded-2xl p-5 border border-danger/20 flex flex-col gap-2 shadow-lg">
-          <div className="flex items-center justify-between text-muted">
-            <span className="text-xs font-semibold uppercase tracking-wider text-danger/90">
-              Most Inconsistent Habit
-            </span>
-            <AlertTriangle size={18} className="text-danger" />
+        <div className="bg-surface rounded-2xl p-5 border border-danger/20 flex flex-col justify-between gap-2 shadow-lg min-h-[140px]">
+          <div>
+            <div className="flex items-center justify-between text-muted mb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-danger/90">
+                Most Inconsistent Habit
+              </span>
+              <AlertTriangle size={18} className="text-danger" />
+            </div>
+
+            {mostInconsistent && mostInconsistent.habits?.length > 0 ? (
+              mostInconsistent.habits.length === 1 ? (
+                <p className="text-xl font-bold text-danger truncate tracking-tight" title={mostInconsistent.habits[0].name}>
+                  {mostInconsistent.habits[0].name}
+                </p>
+              ) : (
+                <div className="flex flex-col gap-1">
+                  <p
+                    className="text-sm font-bold text-danger leading-snug line-clamp-2"
+                    title={mostInconsistent.name}
+                  >
+                    {mostInconsistent.name}
+                  </p>
+                  <span className="text-[10px] uppercase font-bold text-danger/80 tracking-wider">
+                    {mostInconsistent.habits.length} habits tied
+                  </span>
+                </div>
+              )
+            ) : (
+              <p className="text-xl font-bold text-danger tracking-tight">—</p>
+            )}
           </div>
-          <p className="text-xl font-bold text-danger truncate tracking-tight" title={mostInconsistent?.name}>
-            {mostInconsistent ? mostInconsistent.name : '—'}
-          </p>
+
           <p className="text-danger/80 text-xs">
-            {mostInconsistent
+            {mostInconsistent && mostInconsistent.habits?.length > 0
               ? `${mostInconsistent.percent}% avg in ${shortMonth}`
               : 'No recorded weeks yet'}
           </p>
@@ -329,8 +373,8 @@ export default function AnalyticsPage({ account, habitsData }) {
         ) : (
           <div className="flex flex-col gap-3.5 pt-1">
             {habitBreakdown.map((habit) => {
-              const isHighest = mostConsistent && habit.name === mostConsistent.name
-              const isLowest = mostInconsistent && habit.name === mostInconsistent.name && habitBreakdown.length > 1
+              const isHighest = mostConsistent?.habits?.some(h => h.name === habit.name)
+              const isLowest = mostInconsistent?.habits?.some(h => h.name === habit.name) && habitBreakdown.length > 1
               return (
                 <div key={habit.id} className="flex items-center gap-4 py-1">
                   <div className="w-48 truncate flex items-center gap-2">
