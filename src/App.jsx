@@ -26,10 +26,11 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex font-sans">
+    <div className="min-h-screen bg-background flex flex-col md:flex-row font-sans overflow-x-hidden">
       <Sidebar activePage={activePage} setActivePage={setActivePage} />
-      {/* pl-24 clears the fixed sidebar (w-16 + left-4 margin + gap) */}
-      <div className="flex-1 pl-24">
+      {/* pl-0 on mobile, md:pl-24 clears the fixed desktop sidebar (w-16 + left-4 margin + gap) */}
+      {/* pb-24 on mobile ensures bottom nav bar doesn't overlap page content */}
+      <div className="flex-1 pl-0 pb-24 md:pl-24 md:pb-6 min-w-0 overflow-x-hidden">
         {renderPage()}
       </div>
     </div>

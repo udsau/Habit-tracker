@@ -110,17 +110,19 @@ export default function AnalyticsPage({ account, habitsData }) {
     monthlyScore,
     activeHabitsCount,
     habitBreakdown,
+    hasMeaningfulData,
+    hasVariance,
   } = useMemo(() => {
     return getMonthlyHabitStats(monthlyWeeklyScores, habits, accountCreatedAt)
   }, [monthlyWeeklyScores, habits, accountCreatedAt])
 
   return (
-    <main className="flex flex-col gap-6 p-6 w-full min-h-screen max-w-5xl font-sans">
+    <main className="flex flex-col gap-6 p-4 sm:p-6 w-full min-h-screen max-w-5xl font-sans">
       {/* ── Page Header ─────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <p className="text-muted text-sm mb-1">Performance Overview</p>
-          <h1 className="text-4xl font-bold text-white tracking-tight">Analytics</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">Analytics</h1>
           <p className="text-muted text-sm mt-1">
             Monthly habit consistency, weekly breakdown, and tracking trends.
           </p>
@@ -130,7 +132,7 @@ export default function AnalyticsPage({ account, habitsData }) {
         <div className="flex items-center gap-1.5 bg-surface border border-white/5 rounded-2xl p-1.5 self-start sm:self-auto shadow-md">
           <button
             onClick={goToPreviousMonth}
-            className="p-2 rounded-xl text-muted hover:text-white hover:bg-white/5 transition-colors"
+            className="p-2 rounded-xl text-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
             title="Previous Month"
             aria-label="Previous Month"
           >
@@ -143,7 +145,7 @@ export default function AnalyticsPage({ account, habitsData }) {
 
           <button
             onClick={goToNextMonth}
-            className="p-2 rounded-xl text-muted hover:text-white hover:bg-white/5 transition-colors"
+            className="p-2 rounded-xl text-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
             title="Next Month"
             aria-label="Next Month"
           >
@@ -154,30 +156,33 @@ export default function AnalyticsPage({ account, habitsData }) {
 
       {/* ── 4 Stat Cards ─────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Most Consistent Habit */}
-        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex flex-col justify-between gap-2 shadow-lg min-h-[140px]">
-          <div>
-            <div className="flex items-center justify-between text-muted mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider">
-                Most Consistent Habit
-              </span>
-              <Award size={18} className="text-accent" />
-            </div>
+        {/* Card 1: Consistent Habit */}
+        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex flex-col justify-between shadow-lg h-auto min-h-[160px] sm:h-[176px]">
+          <div className="flex items-center justify-between gap-2 text-muted">
+            <span className="text-xs font-semibold uppercase tracking-wider">
+              Consistent
+            </span>
+            <Award size={18} className="text-accent shrink-0" />
+          </div>
 
-            {mostConsistent && mostConsistent.habits?.length > 0 ? (
+          <div className="my-auto min-h-0">
+            {hasMeaningfulData && mostConsistent && mostConsistent.habits?.length > 0 ? (
               mostConsistent.habits.length === 1 ? (
                 <p className="text-xl font-bold text-white truncate tracking-tight" title={mostConsistent.habits[0].name}>
                   {mostConsistent.habits[0].name}
                 </p>
               ) : (
-                <div className="flex flex-col gap-1">
-                  <p
-                    className="text-sm font-bold text-white leading-snug line-clamp-2"
-                    title={mostConsistent.name}
-                  >
-                    {mostConsistent.name}
-                  </p>
-                  <span className="text-[10px] uppercase font-bold text-accent tracking-wider">
+                <div className="flex flex-col gap-1 min-h-0">
+                  <div className="max-h-16 overflow-y-auto pr-1.5 scrollbar-subtle">
+                    <p className="text-sm font-bold text-white leading-snug">
+                      {mostConsistent.habits.map((h, i) => (
+                        <span key={h.id || h.name}>
+                          {h.name}{i < mostConsistent.habits.length - 1 ? ', ' : ''}
+                        </span>
+                      ))}
+                    </p>
+                  </div>
+                  <span className="text-[10px] uppercase font-bold text-accent tracking-wider shrink-0">
                     {mostConsistent.habits.length} habits tied
                   </span>
                 </div>
@@ -188,81 +193,90 @@ export default function AnalyticsPage({ account, habitsData }) {
           </div>
 
           <p className="text-muted text-xs">
-            {mostConsistent && mostConsistent.habits?.length > 0
+            {hasMeaningfulData && mostConsistent && mostConsistent.habits?.length > 0
               ? `${mostConsistent.percent}% avg in ${shortMonth}`
-              : 'No recorded weeks yet'}
+              : 'No data yet'}
           </p>
         </div>
 
-        {/* Card 2: Most Inconsistent Habit */}
-        <div className="bg-surface rounded-2xl p-5 border border-danger/20 flex flex-col justify-between gap-2 shadow-lg min-h-[140px]">
-          <div>
-            <div className="flex items-center justify-between text-muted mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-danger/90">
-                Most Inconsistent Habit
-              </span>
-              <AlertTriangle size={18} className="text-danger" />
-            </div>
+        {/* Card 2: Inconsistent Habit */}
+        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex flex-col justify-between shadow-lg h-auto min-h-[160px] sm:h-[176px]">
+          <div className="flex items-center justify-between gap-2 text-muted">
+            <span className="text-xs font-semibold uppercase tracking-wider">
+              Inconsistent
+            </span>
+            <AlertTriangle size={18} className="text-danger shrink-0" />
+          </div>
 
-            {mostInconsistent && mostInconsistent.habits?.length > 0 ? (
+          <div className="my-auto min-h-0">
+            {hasMeaningfulData && hasVariance && mostInconsistent && mostInconsistent.habits?.length > 0 ? (
               mostInconsistent.habits.length === 1 ? (
                 <p className="text-xl font-bold text-danger truncate tracking-tight" title={mostInconsistent.habits[0].name}>
                   {mostInconsistent.habits[0].name}
                 </p>
               ) : (
-                <div className="flex flex-col gap-1">
-                  <p
-                    className="text-sm font-bold text-danger leading-snug line-clamp-2"
-                    title={mostInconsistent.name}
-                  >
-                    {mostInconsistent.name}
-                  </p>
-                  <span className="text-[10px] uppercase font-bold text-danger/80 tracking-wider">
+                <div className="flex flex-col gap-1 min-h-0">
+                  <div className="max-h-16 overflow-y-auto pr-1.5 scrollbar-subtle">
+                    <p className="text-sm font-bold text-danger leading-snug">
+                      {mostInconsistent.habits.map((h, i) => (
+                        <span key={h.id || h.name}>
+                          {h.name}{i < mostInconsistent.habits.length - 1 ? ', ' : ''}
+                        </span>
+                      ))}
+                    </p>
+                  </div>
+                  <span className="text-[10px] uppercase font-bold text-accent tracking-wider shrink-0">
                     {mostInconsistent.habits.length} habits tied
                   </span>
                 </div>
               )
             ) : (
-              <p className="text-xl font-bold text-danger tracking-tight">—</p>
+              <p className="text-xl font-bold text-white tracking-tight">—</p>
             )}
           </div>
 
-          <p className="text-danger/80 text-xs">
-            {mostInconsistent && mostInconsistent.habits?.length > 0
+          <p className="text-muted text-xs">
+            {hasMeaningfulData && hasVariance && mostInconsistent && mostInconsistent.habits?.length > 0
               ? `${mostInconsistent.percent}% avg in ${shortMonth}`
-              : 'No recorded weeks yet'}
+              : hasMeaningfulData && !hasVariance
+              ? 'No variance — all habits equally consistent'
+              : 'No data yet'}
           </p>
         </div>
 
         {/* Card 3: Monthly Score */}
-        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex flex-col gap-2 shadow-lg">
+        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex flex-col justify-between shadow-lg h-auto min-h-[160px] sm:h-[176px]">
           <div className="flex items-center justify-between text-muted">
             <span className="text-xs font-semibold uppercase tracking-wider">
               Monthly Score
             </span>
-            <TrendingUp size={18} className="text-accent" />
+            <TrendingUp size={18} className="text-accent shrink-0" />
           </div>
-          <p className="text-3xl font-bold text-white tracking-tight">{monthlyScore}%</p>
+          <div className="my-auto">
+            <p className="text-3xl font-bold text-white tracking-tight">{monthlyScore}%</p>
+          </div>
           <p className="text-muted text-xs">
             All habits & weeks combined in {shortMonth}
           </p>
         </div>
 
         {/* Card 4: Active Habits */}
-        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex flex-col gap-2 shadow-lg">
+        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex flex-col justify-between shadow-lg h-auto min-h-[160px] sm:h-[176px]">
           <div className="flex items-center justify-between text-muted">
             <span className="text-xs font-semibold uppercase tracking-wider">
               Active Habits
             </span>
-            <Target size={18} className="text-accent" />
+            <Target size={18} className="text-accent shrink-0" />
           </div>
-          <p className="text-3xl font-bold text-white tracking-tight">{activeHabitsCount}</p>
+          <div className="my-auto">
+            <p className="text-3xl font-bold text-white tracking-tight">{activeHabitsCount}</p>
+          </div>
           <p className="text-muted text-xs">Habits currently being tracked</p>
         </div>
       </div>
 
       {/* ── Main Chart: Weekly Breakdown for Selected Month ─ */}
-      <div className="bg-surface rounded-2xl p-6 border border-white/5 flex flex-col gap-4 shadow-xl">
+      <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-white/5 flex flex-col gap-4 shadow-xl">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-2.5">
             <BarChart3 size={20} className="text-accent" />
@@ -355,7 +369,7 @@ export default function AnalyticsPage({ account, habitsData }) {
       </div>
 
       {/* ── Habit Consistency Breakdown for Selected Month ── */}
-      <div className="bg-surface rounded-2xl p-6 border border-white/5 flex flex-col gap-4 shadow-xl">
+      <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-white/5 flex flex-col gap-4 shadow-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar size={18} className="text-accent" />
@@ -373,12 +387,12 @@ export default function AnalyticsPage({ account, habitsData }) {
         ) : (
           <div className="flex flex-col gap-3.5 pt-1">
             {habitBreakdown.map((habit) => {
-              const isHighest = mostConsistent?.habits?.some(h => h.name === habit.name)
-              const isLowest = mostInconsistent?.habits?.some(h => h.name === habit.name) && habitBreakdown.length > 1
+              const isHighest = hasMeaningfulData && hasVariance && mostConsistent?.habits?.some(h => h.name === habit.name)
+              const isLowest = hasMeaningfulData && hasVariance && mostInconsistent?.habits?.some(h => h.name === habit.name) && habitBreakdown.length > 1
               return (
-                <div key={habit.id} className="flex items-center gap-4 py-1">
-                  <div className="w-48 truncate flex items-center gap-2">
-                    <span className="text-white text-sm font-medium">{habit.name}</span>
+                <div key={habit.id} className="flex items-center gap-3 sm:gap-4 py-1">
+                  <div className="w-28 sm:w-48 truncate flex items-center gap-1.5 sm:gap-2 shrink-0">
+                    <span className="text-white text-sm font-medium truncate">{habit.name}</span>
                     {isHighest && (
                       <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-accent/20 text-accent">
                         Best

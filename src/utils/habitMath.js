@@ -84,7 +84,9 @@ export function getWeeklyProgress(habit, weekDates = null, accountCreatedAt = nu
     ? Math.min(100, Math.round((completed / effectiveGoal) * 100))
     : 0
 
-  return { completed, goal: effectiveGoal, percent }
+  // Return raw habit.goal so the display always shows the user's actual target.
+  // effectiveGoal is only used internally to compute the percent for partial weeks.
+  return { completed, goal: habit.goal, percent }
 }
 
 /**

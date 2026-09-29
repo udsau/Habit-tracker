@@ -58,36 +58,37 @@ export default function HabitRow({
     <div
       ref={setNodeRef}
       style={rowStyle}
-      className={`group relative z-10 grid items-center py-2 rounded-xl transition-colors ${
+      className={`group grid items-center py-2 rounded-xl transition-colors outline-none focus:outline-none ${
         isReadOnly ? '' : 'hover:bg-white/5'
       }`}
       {...(!isReadOnly ? attributes : {})}
     >
-      {/* ── Drag handle ──────────────────────────────────── */}
-      {isReadOnly ? (
-        <div /> // Spacer to preserve column width
-      ) : (
-        <div
-          {...listeners}
-          className="flex items-center justify-center opacity-0 group-hover:opacity-100
-                     transition-opacity cursor-grab active:cursor-grabbing
-                     text-muted hover:text-accent"
-          title="Drag to reorder"
-        >
-          <GripVertical size={16} strokeWidth={2} />
-        </div>
-      )}
+      {/* ── 1. Sticky habit name cell (with drag handle, name, and delete button) ── */}
+      <div className="sticky left-0 z-20 bg-surface group-hover:bg-[#352b4c] flex items-center gap-2 min-w-0 pr-3 py-1 border-r border-white/5 transition-colors">
+        {/* Drag handle */}
+        {!isReadOnly && (
+          <div
+            {...listeners}
+            className="flex items-center justify-center opacity-0 group-hover:opacity-100
+                       transition-opacity cursor-grab active:cursor-grabbing
+                       text-muted hover:text-accent shrink-0"
+            title="Drag to reorder"
+          >
+            <GripVertical size={16} strokeWidth={2} />
+          </div>
+        )}
 
-      {/* ── Name + delete ────────────────────────────────── */}
-      <div className="flex items-center gap-1 min-w-0 pr-1">
-        <span className="text-white text-sm font-medium truncate flex-1">
+        {/* Name */}
+        <span className="text-white text-sm font-medium truncate flex-1" title={habit.name}>
           {habit.name}
         </span>
+
+        {/* Delete button */}
         {!isReadOnly && onDelete && (
           <button
             onClick={() => onDelete(habit.id)}
             className="opacity-0 group-hover:opacity-100 transition-opacity
-                       text-muted hover:text-danger shrink-0"
+                       text-muted hover:text-danger shrink-0 cursor-pointer p-0.5"
             title="Delete habit"
           >
             <X size={14} strokeWidth={2.5} />
@@ -95,7 +96,7 @@ export default function HabitRow({
         )}
       </div>
 
-      {/* ── Day checkboxes ───────────────────────────────── */}
+      {/* ── 2-8. Day checkboxes ───────────────────────────────── */}
       {DAYS.map((day, i) => {
         const { date, isBeforeAccount } = weekDates[i] ?? { date: null, isBeforeAccount: false }
         const checked    = habit.completedDays[day]
@@ -105,7 +106,7 @@ export default function HabitRow({
         // Days before account creation — render as blank space (no circle at all)
         if (isBeforeAccount) {
           return (
-            <div key={day} className="flex items-center justify-center">
+            <div key={day} className="flex items-center justify-center z-10">
               <div className="w-8 h-8" aria-hidden="true" />
             </div>
           )
@@ -114,7 +115,7 @@ export default function HabitRow({
         // When read-only, render static indicators
         if (isReadOnly) {
           return (
-            <div key={day} className="flex items-center justify-center">
+            <div key={day} className="flex items-center justify-center z-10">
               <div
                 title={checked ? `${day} — Completed` : `${day} — Not completed`}
                 className={`
@@ -142,7 +143,7 @@ export default function HabitRow({
         }
 
         return (
-          <div key={day} className="flex items-center justify-center">
+          <div key={day} className="flex items-center justify-center z-10">
             <button
               onClick={toggleable ? () => onToggleDay(habit.id, day) : undefined}
               disabled={!toggleable}
@@ -179,9 +180,9 @@ export default function HabitRow({
         )
       })}
 
-      {/* ── Progress ─────────────────────────────────────── */}
-      <div className="flex items-center gap-2">
-        <div className="flex-1 h-1.5 rounded-full bg-background overflow-hidden">
+      {/* ── 9. Progress ─────────────────────────────────────── */}
+      <div className="flex items-center gap-2 z-10 pl-1 min-w-0">
+        <div className="flex-1 min-w-0 h-1.5 rounded-full bg-background overflow-hidden">
           <div
             className="h-full rounded-full bg-accent transition-all duration-300"
             style={{ width: `${percent}%` }}
@@ -189,7 +190,7 @@ export default function HabitRow({
         </div>
 
         {/* Goal number display with inline editing and tooltip */}
-        <div className="w-14 text-right">
+        <div className="w-10 text-left shrink-0">
           {isEditingGoal ? (
             <div className="flex items-center gap-0.5 justify-end">
               <span className="text-muted text-xs font-medium">{completed}/</span>

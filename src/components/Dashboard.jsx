@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Search, ChevronLeft, ChevronRight, History } from 'lucide-react'
+import { ChevronLeft, ChevronRight, History } from 'lucide-react'
 import { useHabits, emptyDays } from '../hooks/useHabits'
 import { useWeekHistory } from '../hooks/useWeekHistory'
 import { getToday } from '../utils/devClock'
@@ -111,24 +111,12 @@ export default function Dashboard({ account, habitsData }) {
   )
 
   return (
-    <main className="flex flex-col gap-6 p-6 w-full min-h-screen max-w-5xl">
-
-      {/* ── Top bar ─────────────────────────────────────── */}
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 bg-surface rounded-full px-4 py-2.5 flex-1 max-w-sm">
-          <Search size={16} className="text-muted shrink-0" />
-          <input
-            type="text"
-            placeholder="Search habits…"
-            className="bg-transparent text-sm text-white placeholder:text-muted outline-none w-full"
-          />
-        </div>
-      </div>
+    <main className="flex flex-col gap-6 p-4 sm:p-6 w-full min-h-screen max-w-5xl">
 
       {/* ── Page heading + Week Navigation ──────────────── */}
       <div>
         <p className="text-muted text-sm mb-1">Welcome, {userName}.</p>
-        <h1 className="text-4xl font-bold text-white tracking-tight">Habit Tracker</h1>
+        <h1 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">Habit Tracker</h1>
 
         {/* Date range with week navigator arrows */}
         <div className="flex items-center gap-3 mt-2 flex-wrap">
@@ -183,20 +171,18 @@ export default function Dashboard({ account, habitsData }) {
       </div>
 
       {/* ── Stats row ────────────────────────────────────── */}
-      <div className="flex items-center gap-4">
-        <div className="flex gap-4 flex-1">
-          <StatsCard label="Total Habits" value={displayedHabits.length} />
-          <StatsCard
-            label={isCurrentWeek ? 'Weekly Average' : 'Week Score'}
-            value={`${overallPercent}%`}
-          />
-          <StatsCard
-            label={isCurrentWeek ? 'Completed Today' : 'Total Check-ins'}
-            value={isCurrentWeek ? `${completedToday} / ${habits.length}` : `${totalCheckedIn} done`}
-          />
-        </div>
-        <div className="bg-surface rounded-2xl p-5 flex items-center justify-center shrink-0">
-          <ProgressDonut percent={overallPercent} size={130} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatsCard label="Total Habits" value={displayedHabits.length} />
+        <StatsCard
+          label={isCurrentWeek ? 'Weekly Average' : 'Week Score'}
+          value={`${overallPercent}%`}
+        />
+        <StatsCard
+          label={isCurrentWeek ? 'Completed Today' : 'Total Check-ins'}
+          value={isCurrentWeek ? `${completedToday} / ${habits.length}` : `${totalCheckedIn} done`}
+        />
+        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex items-center justify-center shadow-lg min-h-[140px]">
+          <ProgressDonut percent={overallPercent} size={120} />
         </div>
       </div>
 

@@ -17,3 +17,23 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+/* Custom subtle scrollbar matching dark theme palette */
+.scrollbar-subtle::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-subtle::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+}
+.scrollbar-subtle::-webkit-scrollbar-thumb {
+  background: rgba(139, 111, 224, 0.45);
+  border-radius: 4px;
+}
+.scrollbar-subtle::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 111, 224, 0.75);
+}
+.scrollbar-subtle {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 111, 224, 0.45) transparent;
+}

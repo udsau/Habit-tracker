@@ -28,11 +28,11 @@ export default function SettingsPage({ account }) {
     : null
 
   return (
-    <main className="flex flex-col gap-6 p-6 w-full min-h-screen max-w-5xl font-sans">
+    <main className="flex flex-col gap-6 p-4 sm:p-6 w-full min-h-screen max-w-5xl font-sans">
       {/* ── Page Header ─────────────────────────────────── */}
       <div>
         <p className="text-muted text-sm mb-1">Preferences</p>
-        <h1 className="text-4xl font-bold text-white tracking-tight">Settings</h1>
+        <h1 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">Settings</h1>
         <p className="text-muted text-sm mt-1">
           Manage your account preferences and app data storage.
         </p>
@@ -40,30 +40,30 @@ export default function SettingsPage({ account }) {
 
       {/* ── Account Summary Card ─────────────────────────── */}
       {account && (
-        <div className="bg-surface rounded-2xl p-5 border border-white/5 flex items-center justify-between flex-wrap gap-4 shadow-md">
+        <div className="bg-surface rounded-2xl p-4 sm:p-5 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md">
           <div className="flex items-center gap-3.5">
             <div className="w-11 h-11 rounded-xl bg-accent/15 flex items-center justify-center text-accent shrink-0">
               <User size={20} strokeWidth={2} />
             </div>
-            <div>
-              <p className="text-white text-base font-semibold tracking-tight">
+            <div className="min-w-0">
+              <p className="text-white text-base font-semibold tracking-tight truncate">
                 {account.name}
               </p>
               <div className="flex items-center gap-1.5 text-muted text-xs mt-0.5">
-                <Calendar size={13} className="text-muted/70" />
-                <span>Tracking since {createdDate || account.createdAt}</span>
+                <Calendar size={13} className="text-muted/70 shrink-0" />
+                <span className="truncate">Tracking since {createdDate || account.createdAt}</span>
               </div>
             </div>
           </div>
 
-          <div className="px-3 py-1 rounded-full bg-white/5 text-muted text-xs border border-white/5">
+          <div className="px-3 py-1 rounded-full bg-white/5 text-muted text-xs border border-white/5 self-start sm:self-auto shrink-0">
             Local Storage Profile
           </div>
         </div>
       )}
 
       {/* ── Danger Zone / Reset Option ───────────────────── */}
-      <div className="bg-surface rounded-2xl p-6 border border-danger/20 flex flex-col gap-4 shadow-xl">
+      <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-danger/20 flex flex-col gap-4 shadow-xl">
         <div>
           <h2 className="text-base font-bold text-white tracking-tight">
             Data Management
@@ -104,7 +104,7 @@ export default function SettingsPage({ account }) {
           onClick={() => setIsModalOpen(false)}
         >
           <div
-            className="bg-surface border border-white/10 rounded-2xl p-6 max-w-md w-full shadow-2xl relative flex flex-col gap-4"
+            className="bg-surface border border-white/10 rounded-2xl p-6 max-w-md w-full mx-4 sm:mx-auto shadow-2xl relative flex flex-col gap-4"
             onClick={e => e.stopPropagation()}
             role="dialog"
             aria-modal="true"

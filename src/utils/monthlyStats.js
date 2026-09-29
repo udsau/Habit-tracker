@@ -132,6 +132,8 @@ export function getMonthlyHabitStats(
       monthlyScore: 0,
       activeHabitsCount,
       habitBreakdown: [],
+      hasMeaningfulData: false,
+      hasVariance: false,
     }
   }
 
@@ -155,18 +157,14 @@ export function getMonthlyHabitStats(
     for (const h of week.habits || []) {
       let entry = habitMap.get(h.id)
       if (!entry) {
-        // Fallback: match by name
+        // Try matching by name (handles habits whose id may have changed)
         const matchByName = Array.from(habitMap.values()).find(e => e.name === h.name)
         if (matchByName) {
           entry = matchByName
         } else {
-          entry = {
-            id: h.id,
-            name: h.name,
-            goal: h.goal,
-            weeklyPercents: [],
-          }
-          habitMap.set(h.id, entry)
+          // Habit not in currentHabits — it was deleted. Skip it entirely
+          // so deleted habits never appear in the breakdown or consistent/inconsistent cards.
+          continue
         }
       }
 
@@ -198,6 +196,8 @@ export function getMonthlyHabitStats(
       monthlyScore: 0,
       activeHabitsCount,
       habitBreakdown: [],
+      hasMeaningfulData: false,
+      hasVariance: false,
     }
   }
 
@@ -210,16 +210,22 @@ export function getMonthlyHabitStats(
   const minPercent = sorted[sorted.length - 1].percent
   const mostInconsistentHabits = sorted.filter(h => h.percent === minPercent)
 
+  const hasMeaningfulData = maxPercent > 0
+  const hasVariance = maxPercent > minPercent
+
   const mostConsistent = {
     percent: maxPercent,
     habits: mostConsistentHabits,
     name: mostConsistentHabits.map(h => h.name).join(', '),
+    hasMeaningfulData,
   }
 
   const mostInconsistent = {
     percent: minPercent,
-    habits: mostInconsistentHabits,
-    name: mostInconsistentHabits.map(h => h.name).join(', '),
+    habits: hasVariance ? mostInconsistentHabits : [],
+    name: hasVariance ? mostInconsistentHabits.map(h => h.name).join(', ') : '',
+    hasMeaningfulData,
+    hasVariance,
   }
 
   // Monthly score: overall average completion % across all habits and all weeks combined
@@ -238,5 +244,7 @@ export function getMonthlyHabitStats(
     monthlyScore,
     activeHabitsCount,
     habitBreakdown: sorted,
+    hasMeaningfulData,
+    hasVariance,
   }
 }
