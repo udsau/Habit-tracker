@@ -1,6 +1,6 @@
 # Habit Tracker
 
-A minimalistic, dark-themed habit tracker to help you build consistency, keep up with your daily habits, and actually see your progress over time.
+A streamlined habit tracker to help you build consistency, keep up with your daily habits, and actually see your progress over time.
 
 [**Live App**](https://udsau.github.io/Habit-tracker/)
 
@@ -13,18 +13,17 @@ A minimalistic, dark-themed habit tracker to help you build consistency, keep up
 - **Past Weeks:** Look back at previous weeks in read-only mode.
 - **Local Storage:** Your data is saved in your browser, so there's no account, login, or backend involved.
 
-## Note
-
-Like the [**Study Planner**](https://github.com/udsau/Study-Planner), I made this for my own personal use too. 
-
-This is the initial version, so there's no account system or backend at the moment. Everything is stored locally in your browser using `localStorage`, i.e. your data stays on your device rather than being sent to a server.
-
-One thing to keep in mind: **if you clear the site's browser data, your saved data will be wiped out.** So maybe don't clear your browser storage unless you're okay with starting fresh. :') I'm looking forward to adding more features and improving it as I go!
-
-## Built With
+## Tech Stack
 
 - React + Vite
 - Tailwind CSS
 - Recharts
 - @dnd-kit
 - `localStorage`
+
+## Note
+
+Like the [**Study Planner**](https://github.com/udsau/Study-Planner), I made this for my own personal use too. :]
+
+This is the initial version, so there's no account system or backend at the moment. Everything is stored locally in your browser using `localStorage`, i.e. the data stays on your device rather than being sent to a server. One thing to keep in mind, **if you clear the site's browser data, your saved data will be wiped out.** I'm looking forward to adding more features and improving it as I go!
+
