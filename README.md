@@ -1,7 +1,7 @@
 # Habit Tracker
 
 A streamlined habit tracker to help you build consistency, keep up with your daily habits, and actually see your progress over time.
->*Note: Works best in laptop/desktop.*
+*Note: Works best in laptop/desktop.*
 
 [**Live App**](https://udsau.github.io/Habit-tracker/)
 
